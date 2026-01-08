@@ -3,8 +3,7 @@ class Solution {
   public:
     int findCeil(vector<int>& arr, int x) {
         // code here
-        int start = 0;
-        int end = arr.size() - 1;
+        int start = 0, end = arr.size() - 1;
         int ans = -1;
         while(start <= end){
             int guess = (start+end)/2;
@@ -12,7 +11,7 @@ class Solution {
                 start = guess + 1;
             }else{
                 ans = guess;
-                end = guess-1;
+                end = guess - 1;
             }
         }
         return ans;
