@@ -1,36 +1,28 @@
-
 class Solution {
   public:
     vector<vector<int>> mergeOverlap(vector<vector<int>>& arr) {
+        // Code here
         int n = arr.size();
-        vector<vector<int>> ans;
-        if(n==0)
-            return ans;
-        
-        // sort by start time
         auto lambda = [](vector<int> &a, vector<int> &b){
             return a[0] < b[0];
         };
         sort(arr.begin(),arr.end(), lambda);
-        
-        int prevStart = arr[0][0];
-        int prevEnd = arr[0][1];
+        int s1 = arr[0][0];
+        int e1 = arr[0][1];
+        vector<vector<int>> ans;
         for(int i=1; i<n; i++){
-            int currStart = arr[i][0];
-            int currEnd = arr[i][1];
-            // overlapping
-            if(currStart <= prevEnd){
-                prevStart = min(prevStart, currStart);
-                prevEnd = max(prevEnd, currEnd);
+            int s2 = arr[i][0];
+            int e2 = arr[i][1];
+            if(e1 >= s2){
+                s1 = s1;
+                e1 = max(e1, e2);
+                continue;
             }
-            else{
-                ans.push_back({prevStart, prevEnd});
-                prevStart = currStart;
-                prevEnd = currEnd;
-            }
+            ans.push_back({s1, e1});
+            s1 = s2;
+            e1 = e2;
         }
-        ans.push_back({prevStart, prevEnd});
+        ans.push_back({s1, e1});
         return ans;
     }
 };
-
