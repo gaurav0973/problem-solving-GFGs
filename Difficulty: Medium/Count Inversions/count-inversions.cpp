@@ -1,48 +1,43 @@
 class Solution {
-  public:
-    int inversionCount(vector<int> &arr) {
-        int cnt = 0;
-        solve(arr, 0, arr.size()-1, cnt);
-        return cnt;
-        
-    }
-    
-    void solve(vector<int> &arr, int start, int end, int &cnt){
-        if(start >= end){
-            return;
-        }
-        
-        int mid = (start+end)/2;
-        solve(arr, start, mid, cnt);
-        solve(arr, mid+1, end, cnt);
-        mergeTwoSortedArray(arr, start, mid, end, cnt);
-    }
-    
-    void mergeTwoSortedArray(vector<int>& arr, int start, int mid, int end, int &cnt){
-        int i = start;
-        int j = mid+1;
+public:
+    int countAndMerge(vector<int>& arr, int l, int mid, int r) {
+        int i = l, j = mid + 1;
         vector<int> temp;
-        while(i <= mid && j <= end){
-            if(arr[i] <= arr[j]){
-                temp.push_back(arr[i]);
-                i++;
-            }else{
+        int cnt = 0;
+
+        while (i <= mid && j <= r) {
+            if (arr[i] <= arr[j]) {
+                temp.push_back(arr[i++]);
+            } else {
                 cnt += (mid - i + 1);
-                temp.push_back(arr[j]);
-                j++;
+                temp.push_back(arr[j++]);
             }
         }
-        while(i <= mid){
-            temp.push_back(arr[i]);
-            i++;
+
+        while (i <= mid) temp.push_back(arr[i++]);
+        while (j <= r) temp.push_back(arr[j++]);
+
+        for (int k = l; k <= r; k++) {
+            arr[k] = temp[k - l];
         }
-        while(j <= end){
-            temp.push_back(arr[j]);
-            j++;
-        }
-        
-        for(int i=start; i<=end; i++){
-            arr[i] = temp[i-start];
-        }
+
+        return cnt;
+    }
+
+    int solve(vector<int>& arr, int l, int r) {
+        if (l >= r) return 0;
+
+        int mid = (l + r) / 2;
+
+        int count = 0;
+        count += solve(arr, l, mid);
+        count += solve(arr, mid + 1, r);
+        count += countAndMerge(arr, l, mid, r);
+
+        return count;
+    }
+
+    int inversionCount(vector<int> &arr) {
+        return solve(arr, 0, arr.size() - 1);
     }
 };
