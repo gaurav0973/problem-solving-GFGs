@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool areIsomorphic(string &s1, string &s2) {
+        if (s1.length() != s2.length()) return false;
+        
+        unordered_map<char, char> map1, map2;
+        
+        for (int i = 0; i < s1.length(); i++) {
+            char c1 = s1[i], c2 = s2[i];
+            
+            // Check mapping from s1 to s2
+            if (map1.find(c1) != map1.end()) {
+                if (map1[c1] != c2) return false;
+            } else {
+                map1[c1] = c2;
+            }
+            
+            // Check mapping from s2 to s1
+            if (map2.find(c2) != map2.end()) {
+                if (map2[c2] != c1) return false;
+            } else {
+                map2[c2] = c1;
+            }
+        }
+        
+        return true;
+    }
+};
